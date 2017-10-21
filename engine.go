@@ -2,9 +2,6 @@ package rule
 
 import "github.com/Knetic/govaluate"
 
-// Func represents a function which can be used by actions.
-type Func func(*Context, ...interface{}) (interface{}, error)
-
 // Engine is a rule engine.
 type Engine struct {
 	// Funcs can be added functions which can be used by actions.
@@ -89,10 +86,7 @@ func (eng *Engine) newContext(fact Fact, m Monitor) *Context {
 		funcs: funcs,
 		m:     m,
 	}
-	for k, v := range eng.Funcs {
-		funcs[k] = func(args ...interface{}) (interface{}, error) {
-			return v(ctx, args...)
-		}
-	}
+	ctx.addFuncs(eng.Funcs)
+	ctx.addFuncs(defaultFuncs)
 	return ctx
 }

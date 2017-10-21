@@ -11,3 +11,11 @@ type Context struct {
 	funcs map[string]govaluate.ExpressionFunction
 	m     Monitor
 }
+
+func (ctx *Context) addFuncs(funcs map[string]Func) {
+	for k, v := range funcs {
+		ctx.funcs[k] = func(args ...interface{}) (interface{}, error) {
+			return v(ctx, args...)
+		}
+	}
+}
