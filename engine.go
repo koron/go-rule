@@ -14,7 +14,17 @@ type Engine struct {
 func NewEngine() *Engine {
 	return &Engine{
 		Funcs: map[string]Func{},
-		rules: make([]*Rule, 0, 99),
+		rules: make([]*Rule, 0, 64),
+	}
+}
+
+// AddFuncs adds functions (set of named Func).
+func (eng *Engine) AddFuncs(funcs map[string]Func) {
+	for k, fn := range funcs {
+		if fn == nil {
+			continue
+		}
+		eng.Funcs[k] = fn
 	}
 }
 
