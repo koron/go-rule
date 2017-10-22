@@ -12,10 +12,19 @@ type Context struct {
 	m     Monitor
 }
 
+func newContext(f Fact) *Context {
+	return &Context{
+		Fact:  f,
+		funcs: map[string]govaluate.ExpressionFunction{},
+		m:     &dummyMonitor{},
+	}
+}
+
 func (ctx *Context) addFuncs(funcs map[string]Func) {
 	for k, v := range funcs {
+		f := v
 		ctx.funcs[k] = func(args ...interface{}) (interface{}, error) {
-			return v(ctx, args...)
+			return f(ctx, args...)
 		}
 	}
 }

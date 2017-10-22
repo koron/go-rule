@@ -12,7 +12,7 @@ type NativeFuncError struct {
 }
 
 func (err *NativeFuncError) Error() string {
-	return fmt.Sprintf("native func %s() is failed: %s", err.Name, err.Error)
+	return fmt.Sprintf("native func %s() is failed: %s", err.Name, err.Err.Error())
 }
 
 // ArgsCountError represents mismatch of arguments.

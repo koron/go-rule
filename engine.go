@@ -40,16 +40,13 @@ func (eng *Engine) AddRule(name, condition, action string) (*Rule, error) {
 
 // Eval evaluates rules with a fact. Evaluation can be monitored by Monitor.
 // nil for m is allowed it make monitor disabled.
-func (eng *Engine) Eval(fact Fact, m Monitor) error {
+func (eng *Engine) Eval(fact Fact, m Monitor) {
 	ctx := eng.newContext(fact, m)
 	curr := make([]*Rule, len(eng.rules), len(eng.rules)+99)
 	copy(curr, eng.rules)
 	for {
-		applied, pended, err := eval(curr, ctx, fact)
-		if err != nil {
-			return err
-		}
-		curr = curr[:]
+		applied, pended := eval(curr, ctx, ctx.Fact)
+		curr = curr[:0]
 		for _, r := range applied {
 			if len(r.childRules) > 0 {
 				curr = append(curr, r.childRules...)
@@ -64,26 +61,23 @@ func (eng *Engine) Eval(fact Fact, m Monitor) error {
 			}
 		}
 	}
-	return nil
 }
 
-func eval(rules []*Rule, ctx *Context, fact Fact) ([]*Rule, []*Rule, error) {
+func eval(rules []*Rule, ctx *Context, fact Fact) ([]*Rule, []*Rule) {
 	buf := make([]*Rule, len(rules))
 	applied := 0
 	pended := len(rules)
 	for _, r := range rules {
-		ok, _, err := r.Eval(ctx, fact)
-		if err != nil {
-			return nil, nil, err
-		}
+		ok, _ := r.eval(ctx, fact)
 		if !ok {
 			pended--
 			buf[pended] = r
+			continue
 		}
 		buf[applied] = r
 		applied++
 	}
-	return buf[0:applied], buf[pended:], nil
+	return buf[0:applied], buf[pended:]
 }
 
 func (eng *Engine) newContext(fact Fact, m Monitor) *Context {

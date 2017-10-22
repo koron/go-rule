@@ -74,22 +74,22 @@ func isTrue(v interface{}) bool {
 }
 
 // Eval evaluates a fact.  If condition is true then evaluate action.
-func (r *Rule) Eval(ctx *Context, fact Fact) (bool, interface{}, error) {
+func (r *Rule) eval(ctx *Context, fact Fact) (bool, interface{}) {
 	res, err := r.cond.Evaluate(fact)
 	if err != nil {
 		ctx.m.ConditionError(ctx, r, err)
-		return false, nil, err
+		return false, nil
 	}
 	resTrue := isTrue(res)
 	ctx.m.ConditionResult(ctx, r, resTrue)
 	if !resTrue {
-		return false, nil, nil
+		return false, nil
 	}
 	res2, err := r.doAct(ctx, fact)
 	if err != nil {
-		return true, nil, err
+		return true, nil
 	}
-	return true, res2, nil
+	return true, res2
 }
 
 func (r *Rule) doAct(ctx *Context, fact Fact) (interface{}, error) {
