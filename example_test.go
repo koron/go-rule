@@ -1,10 +1,3 @@
-# Rule engine (experimental)
-
-[![CircleCI](https://circleci.com/gh/koron/go-rule.svg?style=svg)](https://circleci.com/gh/koron/go-rule)
-
-## Example code
-
-```go
 package rule_test
 
 import (
@@ -33,9 +26,3 @@ func ExampleEngine() {
 	eng.Eval(rule.Fact{"temp": 30.0}, nil)
 	eng.Eval(rule.Fact{"temp": 20.0}, nil)
 }
-```
-
-## Links
-
-*   Evaluation engine: <https://github.com/Knetic/govaluate>
-    *   [Manual](https://github.com/Knetic/govaluate/blob/master/MANUAL.md)
