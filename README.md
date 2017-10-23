@@ -1,5 +1,6 @@
 # Rule engine (experimental)
 
+[![GoDoc](https://godoc.org/github.com/koron/go-rule?status.svg)](https://godoc.org/github.com/koron/go-rule)
 [![CircleCI](https://circleci.com/gh/koron/go-rule.svg?style=svg)](https://circleci.com/gh/koron/go-rule)
 
 ## Example code

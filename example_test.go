@@ -7,6 +7,7 @@ import (
 )
 
 func ExampleEngine() {
+	// Setup engine and rules.
 	eng := rule.NewEngine()
 	eng.AddFuncs(map[string]rule.Func{
 		"PRINT": func(ctx *rule.Context, args ...interface{}) (interface{}, error) {
@@ -17,12 +18,12 @@ func ExampleEngine() {
 	eng.AddRule("too cold", `temp < 15`, `PRINT("COLD!")`)
 	eng.AddRule("too hot", `temp >= 25`, `PRINT("HOT!")`)
 	eng.AddRule("OK", `temp >= 15 && temp < 25`, `PRINT("OK")`)
-
+	// Evaluate facts.
+	eng.Eval(rule.Fact{"temp": 10.0}, nil)
+	eng.Eval(rule.Fact{"temp": 30.0}, nil)
+	eng.Eval(rule.Fact{"temp": 20.0}, nil)
 	// Output:
 	// COLD!
 	// HOT!
 	// OK
-	eng.Eval(rule.Fact{"temp": 10.0}, nil)
-	eng.Eval(rule.Fact{"temp": 30.0}, nil)
-	eng.Eval(rule.Fact{"temp": 20.0}, nil)
 }
